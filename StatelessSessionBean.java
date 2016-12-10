@@ -40,6 +40,8 @@
 
 package theatre.service;
 
+import java.math.BigDecimal;
+
 import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
@@ -47,9 +49,15 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.jws.WebParam;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import model.Event;
@@ -61,6 +69,7 @@ public class StatelessSessionBean implements StatelessLocal {
 
 	@Resource
 	private EJBContext context;
+	
 	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
 	private EntityManager em;
 
@@ -76,23 +85,23 @@ public class StatelessSessionBean implements StatelessLocal {
 		return event.toString();
 	}
 	@Override
-	public String addBooking(int idevent,String seat,String username){
+	public String addBooking(int idevent,String seat,String username) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException{
 		//try {
 			//if (//checkReservation(idevent,seat) && checkAvailability(idevent)
 			//	true	
 			//		){
-			
 		
+				UserTransaction utx = context.getUserTransaction();
+		
+				utx.begin();
+			
 				Booking booking = new Booking();
 				booking.setIdEvent(idevent);
 				booking.setSeat(seat);
 				booking.setUserName(username);
-				em.getTransaction().begin();
+			
 				em.persist(booking);
-				em.getTransaction().commit();
-				em.close();
-			
-			
+				utx.commit();
 				return booking.toString();
 				
 			//}
