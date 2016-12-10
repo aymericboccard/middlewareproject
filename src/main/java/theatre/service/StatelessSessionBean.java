@@ -63,19 +63,18 @@ public class StatelessSessionBean implements StatelessLocal {
 	@Resource
 	private EJBContext context;
 	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
-	private EntityManager em;
-
+	private EntityManager em;	
+	
 	
 	// pour tester le fonctionnement de la table EVENTS
 	@Override
-	public String showAllEvent() {
-		Query query = em.createNamedQuery("Event.getAllEvent");
-		
+	public String showAllEvents() {
+		Query query = em.createNamedQuery("Event.getAllEvents");
+
 		List<Event> events = (List<Event>) query.getResultList();
 
 		return events.toString();
 	}
-	
 	
 	// pour tester le fonctionnement de la table EVENTS
 	@Override

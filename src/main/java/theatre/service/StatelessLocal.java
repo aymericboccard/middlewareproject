@@ -10,8 +10,10 @@ import model.Event;
 @Remote
 public interface StatelessLocal {
 
+	
+	public String showAllEvents();
 	public String showEvent(@WebParam(name = "idevent") int idevent);
 	public String showBookingBySeat(@WebParam(name = "seat") String seat);
-	public String showAllEvent();
+
 
 }

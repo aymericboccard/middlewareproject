@@ -21,11 +21,10 @@ public class TheatreService {
 	@WebMethod
 	public String showAllEvents(){
 		try {
-			return metier.showAllEvent();
+			return metier.showAllEvents();
 		} catch (Exception e) {
 			return e.getMessage();
 		}
-		
 	}
 	
 	//test de la table EVENTS
@@ -36,7 +35,6 @@ public class TheatreService {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
-		
 	}
 	
 	//test de la table BOOKING

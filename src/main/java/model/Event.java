@@ -10,9 +10,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "EVENTS")
 
-@NamedQueries({
-	@NamedQuery(name = "Event.getEvent", query = "SELECT e FROM Event e WHERE e.idevent = :idevent"),
-})
+@NamedQueries({ @NamedQuery(name = "Event.getEvent", query = "SELECT e FROM Event e WHERE e.idevent = :idevent"),
+
+		@NamedQuery(name = "Event.getAllEvents", query = "SELECT e FROM Event e") })
 
 public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +20,7 @@ public class Event implements Serializable {
 	@Id
 	@Column(name = "IDEVENT")
 	private int idevent;
-	
+
 	@Column(name = "ARTISTNAME")
 	private String artistName;
 
@@ -33,7 +33,6 @@ public class Event implements Serializable {
 	public Event() {
 	}
 
-	
 	public int getIdEvent() {
 		return this.idevent;
 	}
@@ -41,7 +40,7 @@ public class Event implements Serializable {
 	public void setIdEvent(int idevent) {
 		this.idevent = idevent;
 	}
-	
+
 	public String getArtistName() {
 		return this.artistName;
 	}
@@ -68,8 +67,7 @@ public class Event implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Event [ArtistName=" + artistName + ", date=" + date + ", category=" + category
-				+ "]";
+		return "Event [ArtistName=" + artistName + ", date=" + date + ", category=" + category + "]";
 	}
 
 	@Override
@@ -90,10 +88,11 @@ public class Event implements Serializable {
 					return false;
 			} else {
 				if (category == null) {
-					if (other.category!= null)
+					if (other.category != null)
 						return false;
 				} else {
-					if (!artistName.equals(other.artistName) || !category.equals(other.category) || !date.equals(other.date)){
+					if (!artistName.equals(other.artistName) || !category.equals(other.category)
+							|| !date.equals(other.date)) {
 						return false;
 					}
 				}
