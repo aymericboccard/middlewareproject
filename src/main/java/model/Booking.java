@@ -13,7 +13,8 @@ import javax.persistence.*;
 @NamedQueries({
 	@NamedQuery(name = "Booking.getBookingByIdEvent", query = "SELECT b FROM Booking b WHERE b.idEvent = :idEvent"),
 	@NamedQuery(name = "Booking.getBookingByUserName", query = "SELECT b FROM Booking b WHERE b.userName = :userName"),
-	@NamedQuery(name = "Booking.getBookingBySeat", query = "SELECT b FROM Booking b WHERE b.seat = :seat")
+	@NamedQuery(name = "Booking.getBookingBySeat", query = "SELECT b FROM Booking b WHERE b.seat = :seat"),
+	@NamedQuery(name = "Booking.put", query = "SELECT b FROM Booking b WHERE b.seat = :seat")
 })
 
 public class Booking implements Serializable {
