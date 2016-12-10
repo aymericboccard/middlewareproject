@@ -36,7 +36,15 @@ public class TheatreService {
 			return e.getMessage();
 		}
 	}
-	
+	@WebMethod
+	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username){
+		try {
+			return metier.addBooking(idevent,seat,username);
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+		
+	}
 	//test de la table BOOKING
 	@WebMethod
 	public String showBookingBySeat(@WebParam(name = "seat") String seat){

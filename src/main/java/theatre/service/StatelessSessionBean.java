@@ -40,6 +40,7 @@
 
 package theatre.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -47,6 +48,26 @@ import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.jws.WebParam;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.Query;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+import model.Event;
+import model.Booking;
+import javax.ejb.EJBContext;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.jws.WebParam;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -68,6 +89,7 @@ public class StatelessSessionBean implements StatelessLocal {
 	
 	// pour tester le fonctionnement de la table EVENTS
 	@Override
+
 	public String showAllEvents() {
 		Query query = em.createNamedQuery("Event.getAllEvents");
 
@@ -86,16 +108,103 @@ public class StatelessSessionBean implements StatelessLocal {
 
 		return event.toString();
 	}
+	@Override
+	public String addBooking(int idevent,String seat,String username) throws Exception{
+		//return ""+checkAvailability(idevent);
+		
+		//return checkReservation(idevent, seat);
+		try {
+			if ( checkAvailability(idevent)){
+				if(checkReservation(idevent, seat)){
+			
+		
+					UserTransaction utx = context.getUserTransaction();
+			
+					utx.begin();
+				
+					Booking booking = new Booking();
+					booking.setIdEvent(idevent);
+					booking.setSeat(seat);
+					booking.setUserName(username);
+				
+					em.persist(booking);
+					utx.commit();
+					return booking.toString();
+				}
+				else {
+					return "seat already reserved";
+				}
+			}
+			else {
+				return "tickets sold out";
+			}
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return e.getLocalizedMessage();
+		}
+				
+			//}
+			//else {
+			//	return "booking failed2";
+			//}
+		/*} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "booking failed1";
+		}
+		*/
+}
+
 	
 	// pour tester le fonctionnement de la table BOOKING
 		@Override
-		public String showBookingBySeat(String seat) {
-			Query query = em.createNamedQuery("Booking.getBookingBySeat");
-			query.setParameter("seat", seat);
+	public String showBookingBySeat(String seat) {
+		Query query = em.createNamedQuery("Booking.getBookingBySeat");
+		query.setParameter("seat", seat);
 
-			Booking booking = (Booking) query.getSingleResult();
+		Booking booking = (Booking) query.getResultList();
 
-			return booking.toString();
+		return booking.toString();
+	};
+	public boolean checkReservation(int idevent, String seat) throws Exception{
+				
+		try {
+			Query query = em.createNamedQuery("Booking.getBookingByIdEventandSeat");
+			query.setParameter("idEvent",idevent);
+			query.setParameter("seat",seat);
+			int number = query.getResultList().size();
+			if (number>0){
+				return false;
+			}
+			else{
+				return true;
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		
+	}
+	public boolean checkAvailability(int idevent) throws Exception {
+		try{
+		Query query = em.createNamedQuery("Booking.getSeatsoccupiednumber");
+		query.setParameter("idEvent",idevent);
+		long number = (long) query.getSingleResult();
+		//return number;
+		if (number < 670){
+			return true;
+		}
+		else {return false;}
+		
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return false;
 		}
 
+	}
 }
