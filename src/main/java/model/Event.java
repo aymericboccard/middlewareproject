@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "EVENTS")
 
 @NamedQueries({
-	@NamedQuery(name = "Event.getEvent", query = "SELECT e FROM Event e WHERE e.idevent = :idevent")
+	@NamedQuery(name = "Event.getEvent", query = "SELECT e FROM Event e WHERE e.idevent = :idevent"),
 })
 
 public class Event implements Serializable {

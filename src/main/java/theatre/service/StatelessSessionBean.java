@@ -40,6 +40,8 @@
 
 package theatre.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
@@ -63,6 +65,17 @@ public class StatelessSessionBean implements StatelessLocal {
 	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
 	private EntityManager em;
 
+	
+	// pour tester le fonctionnement de la table EVENTS
+	@Override
+	public String showAllEvent() {
+		Query query = em.createNamedQuery("Event.getAllEvent");
+		
+		List<Event> events = (List<Event>) query.getResultList();
+
+		return events.toString();
+	}
+	
 	
 	// pour tester le fonctionnement de la table EVENTS
 	@Override

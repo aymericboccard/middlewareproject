@@ -16,6 +16,18 @@ public class TheatreService {
 	@EJB(beanName = "BK")
 	private StatelessLocal metier;
 	
+	
+	//test de la table EVENTS
+	@WebMethod
+	public String showAllEvents(){
+		try {
+			return metier.showAllEvent();
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+		
+	}
+	
 	//test de la table EVENTS
 	@WebMethod
 	public String showEvent(@WebParam(name = "idevent") int idevent){
