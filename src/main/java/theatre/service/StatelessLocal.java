@@ -24,6 +24,4 @@ public interface StatelessLocal {
 	public boolean checkReservation(int idevent, String seat) throws Exception;
 	public boolean checkAvailability(int idevent) throws Exception;
 
-
-
 }

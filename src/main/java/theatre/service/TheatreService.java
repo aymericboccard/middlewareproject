@@ -16,7 +16,6 @@ public class TheatreService {
 	@EJB(beanName = "BK")
 	private StatelessLocal metier;
 	
-	
 	//test de la table EVENTS
 	@WebMethod
 	public String showAllEvents(){
@@ -26,7 +25,7 @@ public class TheatreService {
 			return e.getMessage();
 		}
 	}
-	
+
 	//test de la table EVENTS
 	@WebMethod
 	public String showEvent(@WebParam(name = "idevent") int idevent){
@@ -36,6 +35,7 @@ public class TheatreService {
 			return e.getMessage();
 		}
 	}
+
 	@WebMethod
 	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username){
 		try {
@@ -45,6 +45,7 @@ public class TheatreService {
 		}
 		
 	}
+
 	//test de la table BOOKING
 	@WebMethod
 	public String showBookingBySeat(@WebParam(name = "seat") String seat){
