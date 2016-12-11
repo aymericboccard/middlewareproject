@@ -40,7 +40,6 @@ public class TheatreService {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
-		
 	}
 
 
