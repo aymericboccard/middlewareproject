@@ -89,6 +89,14 @@ public class StatelessSessionBean implements StatelessLocal {
 		Event event = (Event) query.getSingleResult();
 		return event.toString();
 	}
+	
+	@Override
+	public String showBookedSeats(int idevent) {
+		Query query = em.createNamedQuery("Booking.getBookingSeats");
+		query.setParameter("idevent", idevent);
+		List<String> seats = (List<String>) query.getResultList();
+		return seats.toString();
+	}
 
 	@Override
 	public String showEventByName(String artistName) {

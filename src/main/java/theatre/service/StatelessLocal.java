@@ -13,6 +13,9 @@ public interface StatelessLocal {
 
 	public String showAllEvents();
 	public String showEventById(@WebParam(name = "idevent") int idevent);
+	
+	public String showBookedSeats(@WebParam(name = "idevent") int idevent);
+	
 	public String showEventByName(@WebParam(name = "artistName") String artistName);
 	public String showBookingBySeat(@WebParam(name = "seat") String seat);
 

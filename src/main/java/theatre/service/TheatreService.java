@@ -65,4 +65,15 @@ public class TheatreService {
 		}
 		
 	}
+	
+	//test de la table BOOKING
+	@WebMethod
+	public String showBookedSeats(@WebParam(name = "idevent") int idevent){
+		try {
+			return metier.showBookedSeats(idevent);
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+		
+	}
 }

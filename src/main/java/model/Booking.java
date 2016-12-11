@@ -14,6 +14,9 @@ import javax.persistence.*;
 	@NamedQuery(name = "Booking.getBookingByIdEvent", query = "SELECT b FROM Booking b WHERE b.idEvent = :idEvent"),
 	@NamedQuery(name = "Booking.getBookingByUserName", query = "SELECT b FROM Booking b WHERE b.userName = :userName"),
 	@NamedQuery(name = "Booking.getBookingBySeat", query = "SELECT b FROM Booking b WHERE b.seat = :seat"),
+	
+	@NamedQuery(name = "Booking.getBookingSeats", query = "SELECT b.seat FROM Booking b WHERE b.idEvent = :idevent ORDER BY b.seat"),
+	
 	@NamedQuery(name = "Booking.getBookingByIdEventandSeat", query = "SELECT b FROM Booking b WHERE b.seat = :seat AND b.idEvent = :idEvent"),
 	@NamedQuery(name = "Booking.getSeatsoccupiednumber", query = "SELECT COUNT(b.idEvent) FROM Booking b WHERE b.idEvent = :idEvent"),
 	@NamedQuery(name = "Booking.getBookingByEventandsectionA",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'A%'"),
