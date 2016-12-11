@@ -12,7 +12,9 @@ import javax.persistence.*;
 
 @NamedQueries({ @NamedQuery(name = "Event.getEvent", query = "SELECT e FROM Event e WHERE e.idevent = :idevent"),
 
-		@NamedQuery(name = "Event.getAllEvents", query = "SELECT e FROM Event e") })
+		@NamedQuery(name = "Event.getAllEvents", query = "SELECT e FROM Event e"),
+		@NamedQuery(name = "Event.getIdEvent", query = "SELECT e.idevent FROM Event e")
+})
 
 public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;

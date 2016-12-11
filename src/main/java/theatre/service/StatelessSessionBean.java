@@ -60,13 +60,12 @@ import model.Booking;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class StatelessSessionBean implements StatelessLocal {
 
-	//private static final char A = 'A';
+	// private static final char A = 'A';
 	@Resource
 	private EJBContext context;
 	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
-	private EntityManager em;	
-	
-	
+	private EntityManager em;
+
 	// pour tester le fonctionnement de la table EVENTS
 	@SuppressWarnings("unchecked")
 	@Override
@@ -77,7 +76,7 @@ public class StatelessSessionBean implements StatelessLocal {
 
 		return events.toString();
 	}
-	
+
 	// pour tester le fonctionnement de la table EVENTS
 	@Override
 
@@ -89,63 +88,57 @@ public class StatelessSessionBean implements StatelessLocal {
 
 		return event.toString();
 	}
+
 	@Override
-	public String addBooking(int idevent,String seat,String username) throws Exception{
-		//return ""+checkAvailability2(idevent,seat);
-		
-		//return checkReservation(idevent, seat);
+	public String addBooking(int idevent, String section, String username) throws Exception {
+		// return ""+checkAvailability2(idevent,seat);
+
+		// return checkReservation(idevent, seat);
 		try {
-			if(checkAvailability(idevent)){
-				
-				if ( checkAvailability2(idevent, seat)){
-					if(checkReservation(idevent, seat)){
-				
-			
+			if (checkAvailability(idevent)) {
+
+				if (checkAvailabilityBySection(idevent, section)) {
+					if (checkReservation(idevent, section)) {
+
 						UserTransaction utx = context.getUserTransaction();
-				
+
 						utx.begin();
-					
+
 						Booking booking = new Booking();
 						booking.setIdEvent(idevent);
-						booking.setSeat(seat);
+						booking.setSeat(section);
 						booking.setUserName(username);
-					
+
 						em.persist(booking);
 						utx.commit();
 						return booking.toString();
-					}
-					else {
+					} else {
 						return "seat already reserved";
 					}
-				}
-				else {
+				} else {
 					return "tickets sold out,try other sections";
 				}
-			}
-			else {
+			} else {
 				return "all tickets for all sections sold out, maybe next time!";
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return e.getLocalizedMessage();
 		}
-				
-			//}
-			//else {
-			//	return "booking failed2";
-			//}
-		/*} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "booking failed1";
-		}
-		*/
-}
 
-	
+		// }
+		// else {
+		// return "booking failed2";
+		// }
+		/*
+		 * } catch (Exception e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); return "booking failed1"; }
+		 */
+	}
+
 	// pour tester le fonctionnement de la table BOOKING
-		@Override
+	@Override
 	public String showBookingBySeat(String seat) {
 		Query query = em.createNamedQuery("Booking.getBookingBySeat");
 		query.setParameter("seat", seat);
@@ -154,17 +147,17 @@ public class StatelessSessionBean implements StatelessLocal {
 
 		return Bookings.toString();
 	};
-	public boolean checkReservation(int idevent, String seat) throws Exception{
-				
+
+	public boolean checkReservation(int idevent, String seat) throws Exception {
+
 		try {
 			Query query = em.createNamedQuery("Booking.getBookingByIdEventandSeat");
-			query.setParameter("idEvent",idevent);
-			query.setParameter("seat",seat);
+			query.setParameter("idEvent", idevent);
+			query.setParameter("seat", seat);
 			int number = query.getResultList().size();
-			if (number>0){
+			if (number > 0) {
 				return false;
-			}
-			else{
+			} else {
 				return true;
 			}
 		} catch (Exception e) {
@@ -173,20 +166,27 @@ public class StatelessSessionBean implements StatelessLocal {
 			return false;
 		}
 	}
-	
-	
+
 	public boolean checkAvailability(int idevent) throws Exception {
-		try{
-		Query query = em.createNamedQuery("Booking.getSeatsoccupiednumber");
-		query.setParameter("idEvent",idevent);
-		long number = (long) query.getSingleResult();
-		//return number;
-		
-		if (number < 670){
-			return true;
-		}
-		else {return false;}
-		
+		try {
+
+			Query testQuery = em.createNamedQuery("Event.getIdEvent");
+			List<Integer> eventsIds = (List<Integer>) testQuery.getResultList();
+			if (!eventsIds.contains(idevent)) {
+				return false;
+			}
+
+			Query query = em.createNamedQuery("Booking.getSeatsoccupiednumber");
+			query.setParameter("idEvent", idevent);
+			long number = (long) query.getSingleResult();
+			// return number;
+
+			if (number < 670) {
+				return true;
+			} else {
+				return false;
+			}
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -194,51 +194,69 @@ public class StatelessSessionBean implements StatelessLocal {
 		}
 
 	}
-	public boolean checkAvailability2(int idevent, String seat)throws Exception{
-		try{
-			char firstletter = seat.charAt(0);
-			switch (firstletter){
+
+	public boolean checkAvailabilityBySection(int idevent, String section) throws Exception {
+		try {
+
+			Query testQuery = em.createNamedQuery("Event.getIdEvent");
+			List<Integer> eventsIds = (List<Integer>) testQuery.getResultList();
+			if (!eventsIds.contains(idevent)) {
+				return false;
+			}
+
+			char firstletter = 0;
+			if (!section.isEmpty()) {
+				firstletter = section.charAt(0);
+			} else {
+				return false;
+			}
+
+			switch (firstletter) {
 			case 'A':
 				Query query1 = em.createNamedQuery("Booking.getBookingByEventandsectionA");
-				query1.setParameter("idEvent",idevent);
-				//query1.setParameter("seat",seat);
-				if ((long) query1.getSingleResult() < 25){
+				query1.setParameter("idEvent", idevent);
+				// query1.setParameter("seat",seat);
+				if ((long) query1.getSingleResult() < 25) {
 					return true;
+				} else {
+					return false;
 				}
-				else {return false;}
 			case 'B':
 				Query query2 = em.createNamedQuery("Booking.getBookingByEventandsectionB");
-				query2.setParameter("idEvent",idevent);
-				//query2.setParameter("seat",seat);
-				if ((long) query2.getSingleResult() < 45){
+				query2.setParameter("idEvent", idevent);
+				// query2.setParameter("seat",seat);
+				if ((long) query2.getSingleResult() < 45) {
 					return true;
+				} else {
+					return false;
 				}
-				else {return false;}
-			
+
 			case 'C':
 				Query query3 = em.createNamedQuery("Booking.getBookingByEventandsectionC");
-				query3.setParameter("idEvent",idevent);
-				//query3.setParameter("seat",seat);
-				if ((long) query3.getSingleResult() < 100){
+				query3.setParameter("idEvent", idevent);
+				// query3.setParameter("seat",seat);
+				if ((long) query3.getSingleResult() < 100) {
 					return true;
+				} else {
+					return false;
 				}
-				else {return false;}
 			case 'D':
 				Query query4 = em.createNamedQuery("Booking.getBookingByEventandsectionD");
-				query4.setParameter("idEvent",idevent);
-				//query4.setParameter("seat",seat);
-				if ((long) query4.getSingleResult() < 500){
+				query4.setParameter("idEvent", idevent);
+				// query4.setParameter("seat",seat);
+				if ((long) query4.getSingleResult() < 500) {
 					return true;
+				} else {
+					return false;
 				}
-				else {return false;}
 			default:
 				return false;
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
-		
+
 	}
 }

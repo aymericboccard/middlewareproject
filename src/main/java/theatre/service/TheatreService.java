@@ -27,9 +27,12 @@ public class TheatreService {
 	@WebMethod
 	public String showEvent(@WebParam(name = "idevent") int idevent){
 		try {
+			
 			return metier.showEvent(idevent);
 		} catch (Exception e) {
-			return e.getMessage();
+			
+			System.err.println(e.getMessage());
+			return "Event Not Found!";
 		}
 	}
 
