@@ -16,6 +16,10 @@ import javax.persistence.*;
 	@NamedQuery(name = "Booking.getBookingBySeat", query = "SELECT b FROM Booking b WHERE b.seat = :seat"),
 	@NamedQuery(name = "Booking.getBookingByIdEventandSeat", query = "SELECT b FROM Booking b WHERE b.seat = :seat AND b.idEvent = :idEvent"),
 	@NamedQuery(name = "Booking.getSeatsoccupiednumber", query = "SELECT COUNT(b.idEvent) FROM Booking b WHERE b.idEvent = :idEvent"),
+	@NamedQuery(name = "Booking.getBookingByEventandsectionA",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'A%'"),
+	@NamedQuery(name = "Booking.getBookingByEventandsectionB",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'B%'"),
+	@NamedQuery(name = "Booking.getBookingByEventandsectionC",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'C%'"),
+	@NamedQuery(name = "Booking.getBookingByEventandsectionD",query = "SELECT COUNT(b.seat) FROM Booking b WHERE b.idEvent = :idEvent AND b.seat LIKE 'D%'")
 })
 
 public class Booking implements Serializable {

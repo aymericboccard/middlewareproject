@@ -119,7 +119,7 @@ public class StatelessSessionBean implements StatelessLocal {
 					}
 				}
 				else {
-					return "seat already reserved";
+					return "tickets sold out,try other sections";
 				}
 			}
 			else {
