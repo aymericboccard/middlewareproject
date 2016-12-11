@@ -40,7 +40,6 @@
 
 package theatre.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -48,26 +47,6 @@ import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.jws.WebParam;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.Query;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-
-import model.Event;
-import model.Booking;
-import javax.ejb.EJBContext;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.jws.WebParam;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -88,6 +67,7 @@ public class StatelessSessionBean implements StatelessLocal {
 	
 	
 	// pour tester le fonctionnement de la table EVENTS
+	@SuppressWarnings("unchecked")
 	@Override
 	public String showAllEvents() {
 		Query query = em.createNamedQuery("Event.getAllEvents");
@@ -185,10 +165,9 @@ public class StatelessSessionBean implements StatelessLocal {
 			e.printStackTrace();
 			return false;
 		}
-		
-		
-		
 	}
+	
+	
 	public boolean checkAvailability(int idevent) throws Exception {
 		try{
 		Query query = em.createNamedQuery("Booking.getSeatsoccupiednumber");
