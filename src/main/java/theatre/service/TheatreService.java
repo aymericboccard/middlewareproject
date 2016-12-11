@@ -15,7 +15,7 @@ import model.Booking;
 public class TheatreService {
 	@EJB(beanName = "BK")
 	private StatelessLocal metier;
-	
+
 	//test de la table EVENTS
 	@WebMethod
 	public String showAllEvents(){
@@ -45,6 +45,7 @@ public class TheatreService {
 		}
 		
 	}
+
 
 	//test de la table BOOKING
 	@WebMethod
