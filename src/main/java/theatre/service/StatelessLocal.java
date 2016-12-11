@@ -19,5 +19,6 @@ public interface StatelessLocal {
 	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, Exception;
 	public boolean checkReservation(int idevent, String seat) throws Exception;
 	public boolean checkAvailability(int idevent) throws Exception;
+	public boolean checkAvailability2(int idevent, String seat) throws Exception;
 
 }

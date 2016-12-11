@@ -60,6 +60,7 @@ import model.Booking;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class StatelessSessionBean implements StatelessLocal {
 
+	//private static final char A = 'A';
 	@Resource
 	private EJBContext context;
 	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
@@ -90,33 +91,39 @@ public class StatelessSessionBean implements StatelessLocal {
 	}
 	@Override
 	public String addBooking(int idevent,String seat,String username) throws Exception{
-		//return ""+checkAvailability(idevent);
+		//return ""+checkAvailability2(idevent,seat);
 		
 		//return checkReservation(idevent, seat);
 		try {
-			if ( checkAvailability(idevent)){
-				if(checkReservation(idevent, seat)){
-			
-		
-					UserTransaction utx = context.getUserTransaction();
-			
-					utx.begin();
+			if(checkAvailability(idevent)){
 				
-					Booking booking = new Booking();
-					booking.setIdEvent(idevent);
-					booking.setSeat(seat);
-					booking.setUserName(username);
+				if ( checkAvailability2(idevent, seat)){
+					if(checkReservation(idevent, seat)){
 				
-					em.persist(booking);
-					utx.commit();
-					return booking.toString();
+			
+						UserTransaction utx = context.getUserTransaction();
+				
+						utx.begin();
+					
+						Booking booking = new Booking();
+						booking.setIdEvent(idevent);
+						booking.setSeat(seat);
+						booking.setUserName(username);
+					
+						em.persist(booking);
+						utx.commit();
+						return booking.toString();
+					}
+					else {
+						return "seat already reserved";
+					}
 				}
 				else {
-					return "seat already reserved";
+					return "tickets sold out,try other sections";
 				}
 			}
 			else {
-				return "tickets sold out";
+				return "all tickets for all sections sold out, maybe next time!";
 			}
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -143,9 +150,9 @@ public class StatelessSessionBean implements StatelessLocal {
 		Query query = em.createNamedQuery("Booking.getBookingBySeat");
 		query.setParameter("seat", seat);
 
-		Booking booking = (Booking) query.getResultList();
+		List<Booking> Bookings = (List<Booking>) query.getResultList();
 
-		return booking.toString();
+		return Bookings.toString();
 	};
 	public boolean checkReservation(int idevent, String seat) throws Exception{
 				
@@ -185,5 +192,52 @@ public class StatelessSessionBean implements StatelessLocal {
 			return false;
 		}
 
+	}
+	public boolean checkAvailability2(int idevent, String seat)throws Exception{
+		try{
+			char firstletter = seat.charAt(0);
+			switch (firstletter){
+			case 'A':
+				Query query1 = em.createNamedQuery("Booking.getBookingByEventandsectionA");
+				query1.setParameter("idEvent",idevent);
+				//query1.setParameter("seat",seat);
+				if ((long) query1.getSingleResult() < 25){
+					return true;
+				}
+				else {return false;}
+			case 'B':
+				Query query2 = em.createNamedQuery("Booking.getBookingByEventandsectionB");
+				query2.setParameter("idEvent",idevent);
+				//query2.setParameter("seat",seat);
+				if ((long) query2.getSingleResult() < 45){
+					return true;
+				}
+				else {return false;}
+			
+			case 'C':
+				Query query3 = em.createNamedQuery("Booking.getBookingByEventandsectionC");
+				query3.setParameter("idEvent",idevent);
+				//query3.setParameter("seat",seat);
+				if ((long) query3.getSingleResult() < 100){
+					return true;
+				}
+				else {return false;}
+			case 'D':
+				Query query4 = em.createNamedQuery("Booking.getBookingByEventandsectionD");
+				query4.setParameter("idEvent",idevent);
+				//query4.setParameter("seat",seat);
+				if ((long) query4.getSingleResult() < 500){
+					return true;
+				}
+				else {return false;}
+			default:
+				return false;
+			}
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 }
