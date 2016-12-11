@@ -47,6 +47,7 @@ import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.jws.WebParam;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -80,13 +81,22 @@ public class StatelessSessionBean implements StatelessLocal {
 	// pour tester le fonctionnement de la table EVENTS
 	@Override
 
-	public String showEvent(int idevent) {
-		Query query = em.createNamedQuery("Event.getEvent");
+	public String showEventById(int idevent) {
+		Query query = em.createNamedQuery("Event.getEventById");
 		query.setParameter("idevent", idevent);
-
 		Event event = (Event) query.getSingleResult();
-
 		return event.toString();
+	}
+	
+	@Override
+	public String showEventByName( String artistName){
+		Query query = em.createNamedQuery("Event.getEventByName");
+		query.setParameter("artistName", artistName);
+		List<Event> events = (List<Event>) query.getResultList();
+		System.out.println("-------------------------------------------------------------");
+		System.out.println(events);
+		System.out.println("-------------------------------------------------------------");
+		return events.toString();
 	}
 
 	@Override

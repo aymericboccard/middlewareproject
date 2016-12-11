@@ -12,7 +12,8 @@ import javax.transaction.SystemException;
 public interface StatelessLocal {
 
 	public String showAllEvents();
-	public String showEvent(@WebParam(name = "idevent") int idevent);
+	public String showEventById(@WebParam(name = "idevent") int idevent);
+	public String showEventByName(@WebParam(name = "artistName") String artistName);
 	public String showBookingBySeat(@WebParam(name = "seat") String seat);
 
 	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, Exception;

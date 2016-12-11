@@ -25,12 +25,21 @@ public class TheatreService {
 
 	//test de la table EVENTS
 	@WebMethod
-	public String showEvent(@WebParam(name = "idevent") int idevent){
+	public String showEventById(@WebParam(name = "idevent") int idevent){
 		try {
-			
-			return metier.showEvent(idevent);
+			return metier.showEventById(idevent);
 		} catch (Exception e) {
-			
+			System.err.println(e.getMessage());
+			return "Event Not Found!";
+		}
+	}
+	
+	//test de la table EVENTS
+	@WebMethod
+	public String showEventByName(@WebParam(name = "artistName") String artistName){
+		try {
+			return metier.showEventByName(artistName);
+		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			return "Event Not Found!";
 		}
