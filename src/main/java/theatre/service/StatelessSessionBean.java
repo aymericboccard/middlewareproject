@@ -88,7 +88,6 @@ public class StatelessSessionBean implements StatelessLocal {
 	
 	
 	// pour tester le fonctionnement de la table EVENTS
-<<<<<<< HEAD
 	@Override
 	public String showAllEvents() {
 		Query query = em.createNamedQuery("Event.getAllEvents");
