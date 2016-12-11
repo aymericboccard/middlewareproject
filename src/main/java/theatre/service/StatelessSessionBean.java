@@ -40,6 +40,7 @@
 
 package theatre.service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -55,6 +56,8 @@ import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 
 import model.Event;
+import model.MyBank;
+import model.BankClient;
 import model.Booking;
 
 @Stateless(name = "BK")
@@ -80,48 +83,52 @@ public class StatelessSessionBean implements StatelessLocal {
 
 	// pour tester le fonctionnement de la table EVENTS
 	@Override
-
 	public String showEventById(int idevent) {
 		Query query = em.createNamedQuery("Event.getEventById");
 		query.setParameter("idevent", idevent);
 		Event event = (Event) query.getSingleResult();
 		return event.toString();
 	}
-	
+
 	@Override
-	public String showEventByName( String artistName){
+	public String showEventByName(String artistName) {
 		Query query = em.createNamedQuery("Event.getEventByName");
 		query.setParameter("artistName", artistName);
 		List<Event> events = (List<Event>) query.getResultList();
-		System.out.println("-------------------------------------------------------------");
-		System.out.println(events);
-		System.out.println("-------------------------------------------------------------");
 		return events.toString();
 	}
 
 	@Override
-	public String addBooking(int idevent, String section, String username) throws Exception {
+	public String addBooking(int idevent, String seat, String username, String cardNumber, String cardHolderName)
+			throws Exception {
 		// return ""+checkAvailability2(idevent,seat);
 
 		// return checkReservation(idevent, seat);
 		try {
 			if (checkAvailability(idevent)) {
 
-				if (checkAvailabilityBySection(idevent, section)) {
-					if (checkReservation(idevent, section)) {
+				if (checkAvailabilityBySection(idevent, seat)) {
+					if (checkReservation(idevent, seat)) {
 
-						UserTransaction utx = context.getUserTransaction();
+						MyBank bnp = new MyBank();
 
-						utx.begin();
+						if (bnp.checkCardValidity(new BankClient(new BigInteger(cardNumber), cardHolderName))) {
+							UserTransaction utx = context.getUserTransaction();
 
-						Booking booking = new Booking();
-						booking.setIdEvent(idevent);
-						booking.setSeat(section);
-						booking.setUserName(username);
+							utx.begin();
 
-						em.persist(booking);
-						utx.commit();
-						return booking.toString();
+							Booking booking = new Booking();
+							booking.setIdEvent(idevent);
+							booking.setSeat(seat);
+							booking.setUserName(username);
+
+							em.persist(booking);
+							utx.commit();
+							return booking.toString();
+						} else {
+							return "card not valid";
+						}
+
 					} else {
 						return "seat already reserved";
 					}
@@ -150,12 +157,17 @@ public class StatelessSessionBean implements StatelessLocal {
 	// pour tester le fonctionnement de la table BOOKING
 	@Override
 	public String showBookingBySeat(String seat) {
+
 		Query query = em.createNamedQuery("Booking.getBookingBySeat");
 		query.setParameter("seat", seat);
 
 		List<Booking> Bookings = (List<Booking>) query.getResultList();
 
-		return Bookings.toString();
+		if (Bookings.isEmpty()) {
+			return "seat empty!";
+		} else {
+			return Bookings.toString();
+		}
 	};
 
 	public boolean checkReservation(int idevent, String seat) throws Exception {

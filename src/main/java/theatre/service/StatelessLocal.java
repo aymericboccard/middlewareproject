@@ -16,7 +16,7 @@ public interface StatelessLocal {
 	public String showEventByName(@WebParam(name = "artistName") String artistName);
 	public String showBookingBySeat(@WebParam(name = "seat") String seat);
 
-	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, Exception;
+	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username ,@WebParam(name = "cardnumber") String cardNumber,@WebParam(name = "cardholdername") String cardHolderName) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, Exception;
 	public boolean checkReservation(int idevent, String seat) throws Exception;
 	public boolean checkAvailability(int idevent) throws Exception;
 	public boolean checkAvailabilityBySection(int idevent, String section) throws Exception;

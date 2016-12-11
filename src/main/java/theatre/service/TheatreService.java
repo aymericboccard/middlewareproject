@@ -46,9 +46,9 @@ public class TheatreService {
 	}
 
 	@WebMethod
-	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username){
+	public String addBooking(@WebParam(name = "idevent") int idevent,@WebParam(name = "seat") String seat,@WebParam(name = "username") String username, @WebParam(name = "cardnumber") String cardNumber,@WebParam(name = "cardholdername") String cardHolderName){
 		try {
-			return metier.addBooking(idevent,seat,username);
+			return metier.addBooking(idevent,seat,username,cardNumber,cardHolderName);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
